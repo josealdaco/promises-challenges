@@ -2,29 +2,29 @@
  *******************************************************************************
  * INSTRUCTIONS:
  * Follow the steps below and answer the discusssion questions that follow.
- * 
+ *
  * 1. Read over the `greetAndUppercase` function. This function uses
  *    Async/Await. How is this function different than a regular (non-async)
  *    function? What is its return type?
- * 
- * 
+ *
+ *
  * 2. Uncomment block #1 and run the code using `node challenge3.js`. What is
  *    printed when we use `greetAndUppercase` like a regular function?
- * 
- * 
+ *
+ *  Promise is pending
  * 3. Uncomment block #2 and run the code again. What happens now?
- * 
- * 
- * 4. Write an asynchronous method 'spacer' that takes a string as input and 
- *    returns the input string with a space added between each character. You 
+ *
+ *  We recieve the HELLO THERE DUCKY after pending for promise
+ * 4. Write an asynchronous method 'spacer' that takes a string as input and
+ *    returns the input string with a space added between each character. You
  *    can use your solution from Part 3.
- * 
+ *
  *    Call 'spacer' in the `greetAndUppercase` method and run your code again.
  *    You should see something like:
- * 
+ *
  *    'H E L L O   T H E R E ,   D U C K Y'
- * 
- * 
+ *
+ *
  *******************************************************************************
  */
 
@@ -36,13 +36,32 @@
  function greet(name) {
     return new Promise(function(resolve, reject) {
       setTimeout(function() {
-        if (typeof name === 'string') { 
+        if (typeof name === 'string') {
           resolve('Hello there, ' + name);
         } else {
           reject('Name must be a string!');
         }
       }, 500);
     });
+}
+
+function spacer(str){
+    return new Promise(function(resolve, reject){
+        setTimeout(function() {
+            if(typeof str == 'string'){
+        var stringList = str.split("")
+        var stringWord = ""
+        for(i = 0; i < stringList.length; i ++){
+            stringWord += stringList[i] + " "
+        }
+        resolve(stringWord)
+        }
+        else{
+            reject("Not a string")
+        }
+    }, 1000);
+
+});
 }
 
 /**
@@ -64,18 +83,19 @@ function uppercaser(str) {
 async function greetAndUppercase(name) {
     greeting = await greet(name)
     uppercasedGreeting = await uppercaser(greeting)
-    return uppercasedGreeting
+    result = await spacer(uppercasedGreeting)  // Our function is now being called asynchronously
+    return result
 }
 
 /* Uncomment me! #1 */
-// result = greetAndUppercase('Ducky')
-// console.log(result)
+ result = greetAndUppercase('Ducky')
+ console.log(result)
 
 /* Uncomment me! #2 */
-// greetAndUppercase('Ducky')
-//     .then(function(result) {
-//         console.log(result)
-//     })
-//     .catch(function(err) {
-//         console.log(err)
-//     })
+greetAndUppercase('Ducky')
+    .then(function(result) {
+        console.log(result)
+    })
+    .catch(function(err) {
+        console.log(err)
+    })
